@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","Pisces | Gemini":240,"display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="2020年转眼来到，这一年给自己定的小目标">
+  <meta name="description" content="问题描述在接入实时日志监控服务时，最开始使用的是全局窗口进行计算，但是在后续发现单并行度的全局窗口在数据量较大时消费速度就会跟不上，于是考虑到使用keyedwindow提高速率，但是在使用过程中发现有些线程处于空跑的状态，即出现了数据倾斜。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2020.01.01">
-<meta property="og:url" content="http://yoursite.com/2020/01/01/2020-01-01/index.html">
+<meta property="og:title" content="使用Flink的数据倾斜问题">
+<meta property="og:url" content="http://yoursite.com/2020/04/17/%E4%BD%BF%E7%94%A8Flink%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Joey">
-<meta property="og:description" content="2020年转眼来到，这一年给自己定的小目标">
-<meta property="article:published_time" content="2019-12-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-17T13:01:23.933Z">
+<meta property="og:description" content="问题描述在接入实时日志监控服务时，最开始使用的是全局窗口进行计算，但是在后续发现单并行度的全局窗口在数据量较大时消费速度就会跟不上，于是考虑到使用keyedwindow提高速率，但是在使用过程中发现有些线程处于空跑的状态，即出现了数据倾斜。">
+<meta property="article:published_time" content="2020-04-17T12:34:03.000Z">
+<meta property="article:modified_time" content="2020-04-17T13:18:23.396Z">
 <meta property="article:author" content="Joey Zhang">
-<meta property="article:tag" content="生活">
+<meta property="article:tag" content="flink">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/01/01/2020-01-01/">
+<link rel="canonical" href="http://yoursite.com/2020/04/17/%E4%BD%BF%E7%94%A8Flink%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E9%97%AE%E9%A2%98/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>2020.01.01 | Joey</title>
+  <title>使用Flink的数据倾斜问题 | Joey</title>
   
 
 
@@ -162,7 +162,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/01/2020-01-01/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/17/%E4%BD%BF%E7%94%A8Flink%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -175,7 +175,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          2020.01.01
+          使用Flink的数据倾斜问题
         </h1>
 
         <div class="post-meta">
@@ -184,23 +184,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-01-01 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-01T00:00:00+08:00">2020-01-01</time>
+              <time title="创建时间：2020-04-17 20:34:03 / 修改时间：21:18:23" itemprop="dateCreated datePublished" datetime="2020-04-17T20:34:03+08:00">2020-04-17</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-17 21:01:23" itemprop="dateModified" datetime="2020-04-17T21:01:23+08:00">2020-04-17</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%88%91/" itemprop="url" rel="index"><span itemprop="name">我</span></a>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
                 </span>
             </span>
 
@@ -217,7 +211,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>65</span>
+              <span>1.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -226,7 +220,6 @@
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>1 分钟</span>
             </span>
-            <div class="post-description">2020年转眼来到，这一年给自己定的小目标</div>
 
         </div>
       </header>
@@ -237,8 +230,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>2020年转眼来到，这一年给自己定的小目标</p>
-<p>十二本书<br>二十篇论文<br>每个月至少三篇博客<br>二十部电影<br>三个没走过的地方<br>100道leetcode<br>…</p>
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>在接入实时日志监控服务时，最开始使用的是全局窗口进行计算，但是在后续发现单并行度的全局窗口在数据量较大时消费速度就会跟不上，于是考虑到使用keyedwindow提高速率，但是在使用过程中发现有些线程处于空跑的状态，即出现了数据倾斜。</p>
+<a id="more"></a>  
+
+<p>经过排查，是在生成key的时候出现了问题，由于flink内部算法，生成的key经过计算之后无法完全覆盖到所有现场，flink代码如下所示，在选择key时会调用到最初设置的keyselector。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">selectChannel</span><span class="params">(SerializationDelegate&lt;StreamRecord&lt;T&gt;&gt; record)</span> </span>&#123;</span><br><span class="line">		K key;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			key = keySelector.getKey(record.getInstance().getValue());</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Could not extract key from "</span> + record.getInstance().getValue(), e);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> KeyGroupRangeAssignment.assignKeyToParallelOperator(key, maxParallelism, numberOfChannels);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过key和并行度进行计算获取到对应的channel</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Computes the index of the operator to which a key-group belongs under the given parallelism and maximum</span></span><br><span class="line"><span class="comment">	 * parallelism.</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * IMPORTANT: maxParallelism must be &lt;= Short.MAX_VALUE to avoid rounding problems in this method. If we ever want</span></span><br><span class="line"><span class="comment">	 * to go beyond this boundary, this method must perform arithmetic on long values.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">computeOperatorIndexForKeyGroup</span><span class="params">(<span class="keyword">int</span> maxParallelism, <span class="keyword">int</span> parallelism, <span class="keyword">int</span> keyGroupId)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> keyGroupId * parallelism / maxParallelism;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>其中keyGroupId通过key经过hash放大然后模并行度获得，hash的原因是为了让数据更加均匀</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Assigns the given key to a key-group index.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">assignToKeyGroup</span><span class="params">(Object key, <span class="keyword">int</span> maxParallelism)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> computeKeyGroupForKeyHash(key.hashCode(), maxParallelism);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此可以得到数据倾斜的原因，就是key的数量太少导致计算后的得到的channel不均匀，一些没有覆盖到，后续经过实验，如果是32个并行度以下的flink程序使用keyby时，key从1到90左右可以覆盖到所有task。</p>
+<h2 id="数据倾斜的解决方法"><a href="#数据倾斜的解决方法" class="headerlink" title="数据倾斜的解决方法"></a>数据倾斜的解决方法</h2><p>1.提高并行度 。   </p>
+<p>​        让原本分散在同一个task的多个key分散到不同的task中去</p>
+<p>2.两阶段聚合。</p>
+<p>​        第一阶段：在生成key的时候加上自定义前缀，将hot key分散开来。</p>
+<p>​        第二阶段：去除key中的自定义部分，进行计算。</p>
 
     </div>
 
@@ -248,7 +256,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag"># 生活</a>
+              <a href="/tags/flink/" rel="tag"># flink</a>
           </div>
 
         
@@ -256,11 +264,11 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2020/04/17/%E4%BD%BF%E7%94%A8Flink%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E9%97%AE%E9%A2%98/" rel="next" title="使用Flink的数据倾斜问题">
-      使用Flink的数据倾斜问题 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/01/01/2020-01-01/" rel="prev" title="2020.01.01">
+      <i class="fa fa-chevron-left"></i> 2020.01.01
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -319,6 +327,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据倾斜的解决方法"><span class="nav-number">2.</span> <span class="nav-text">数据倾斜的解决方法</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
